@@ -1,3 +1,4 @@
+# Copyright 2026, Yumeng Liu @ USTC
 """
 地铁路径规划 —— 交互式 GUI 模块
 

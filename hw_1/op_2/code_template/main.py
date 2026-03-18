@@ -1,3 +1,4 @@
+# Copyright 2026, Yumeng Liu @ USTC
 """城市地铁出行路径规划 —— 启动入口"""
 
 from pathlib import Path

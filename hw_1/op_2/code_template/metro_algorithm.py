@@ -1,8 +1,8 @@
+# Copyright 2026, Yumeng Liu @ USTC
+
 """
 地铁网络算法模块 —— 数据加载、图构建、Dijkstra 求解
 """
-
-from __future__ import annotations
 
 import csv
 import heapq
@@ -17,7 +17,7 @@ import numpy as np
 
 class Graph:
     """
-    简单的无向加权图（邻接表表示）。
+    简单的无向加权图。
 
     需要实现的接口
     -------------
@@ -33,11 +33,15 @@ class Graph:
     nodes : dict[int, dict]
         节点字典，{node_id: {"name": str, ...}}。
         GUI 会读取此属性来获取节点信息，请确保 add_node 时正确填充。
+
+    提示
+    ----
+    你可以自由选择底层数据结构（邻接表、邻接矩阵、边列表等）。
     """
 
     def __init__(self):
         self.nodes = {}
-        # TODO: 初始化你的数据结构（如邻接表）
+        # TODO: 初始化你的数据结构
 
     def add_node(self, node_id, **attrs):
         """

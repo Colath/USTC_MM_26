@@ -1,5 +1,18 @@
 # 选项3：社交网络关键节点识别
 
+## 目录
+
+- [引言](#引言)
+- [数据说明](#数据说明)
+- [实验要求](#实验要求)
+  - [SIR 信息传播模拟](#sir-信息传播模拟)
+- [Python 框架](#python-框架)
+  - [环境配置](#环境配置)
+  - [文件结构](#文件结构)
+  - [运行方式](#运行方式)
+  - [GUI 说明](#gui-说明)
+  - [需要完成的代码](#需要完成的代码)
+
 ## 引言
 
 在现代社会中，人们通过各种社交平台形成复杂的社交网络。在这些网络中，不同用户的影响力并不相同：一些用户由于处于网络中的关键位置，往往能更快传播信息或影响更多人。识别这些 **关键节点（Key Nodes）** 对于许多实际问题具有重要意义，例如：
@@ -61,3 +74,131 @@
   - 对关键节点进行可视化展示（例如节点大小/颜色表示中心性）
 
 - [Optional] 实现 PageRank 指标，并使用 PageRank 进行关键节点识别
+- [Optional] 实现 SIR 传播模拟，验证关键节点的实际影响力
+
+### SIR 信息传播模拟
+
+#### 背景
+
+想象一下某个社交媒体上的意见领袖发了一条爆炸性新闻。他的粉丝看到后纷纷转发，粉丝的粉丝又继续转发……短短几个小时，这条信息就席卷了整个社交网络。但如果同样的内容由一个只有 3 个关注者的普通用户发出，可能石沉大海。
+
+**从谁开始传播，最终能影响多少人？** 这正是 SIR 模型要回答的问题。
+
+SIR 最初来自流行病学（Susceptible-Infected-Recovered），但它同样适用于社交网络中的 **信息传播**：
+
+| SIR 状态 | 传染病场景 | 信息传播场景 |
+|----------|-----------|-------------|
+| **S** (Susceptible) | 未感染，可能被传染 | 还不知道这条信息 |
+| **I** (Infected) | 正在感染，会传给别人 | 刚看到信息，正在积极转发 |
+| **R** (Recovered) | 已痊愈，不再传播 | 已经看过了，不再转发 |
+
+每一步的传播规则：
+1. 每个 **传播者（I）** 以概率 $\beta$ 将信息推送给每个相邻的 **未知者（S）**
+2. 每个 **传播者（I）** 以概率 $\gamma$ 失去兴趣，变为 **已阅者（R）**
+
+#### SIR 与 PageRank 的关系
+
+PageRank 的核心思想是："被重要网页链接的网页也很重要"——Google 正是用它来给数十亿网页排序。在社交网络中，PageRank 高的节点意味着它被许多"有影响力的人"关注，因此理论上具有更强的信息扩散能力。
+
+但这个理论结论是否经得起实验检验？我们可以用SIR模拟来验证：
+- 选取 PageRank 最高的节点作为信息源头，观察信息能传播到多少人
+- 再选取 PageRank 最低的节点发同样的信息，进行对比
+
+#### 实现提示
+
+```python
+def sir_simulation(G, seeds, beta=0.3, gamma=0.1, max_steps=5):
+    """
+    参数：
+      G        : 图对象
+      seeds    : 初始传播节点列表
+      beta     : 传播概率（每条边每步）
+      gamma    : 衰减概率（传播者每步失去兴趣的概率）
+      max_steps: 最大模拟步数
+
+    返回：
+      history  : 长度为 steps+1 的列表
+                 history[t] = {node_id: 'S'|'I'|'R'}
+                 记录第 t 步每个节点的状态
+    """
+```
+
+基本流程：
+1. 初始化所有节点为 `'S'`，将 `seeds` 中的节点设为 `'I'`
+2. 每一步遍历所有传播者（I），对其每个未知邻居（S）以概率 $\beta$ 传播信息
+3. 每个传播者以概率 $\gamma$ 变为已阅者（R），不再转发
+4. 记录每步的状态快照，直到没有传播者或达到 `max_steps`
+
+## Python 框架
+
+我们提供了一个交互式可视化框架，包含完整的 GUI 界面。你只需要在算法模块和 GUI 模块中补全核心函数即可。模板仅供参考，欢迎实现更 fancy 的版本。
+
+### 环境配置
+
+推荐使用 [Miniforge](https://conda-forge.org/download/) 管理 python 环境。
+
+使用 conda 创建并激活环境：
+
+```bash
+conda create -n mm26 python=3.12
+conda activate mm26
+pip install numpy matplotlib
+```
+
+### 文件结构
+
+```
+code_template/
+├── main.py                # 程序入口（含数据），直接运行即可启动 GUI
+├── gui.py                 # GUI 模块（需补全可视化部分）
+└── network_algorithm.py   # 算法模块（需补全）
+```
+
+### 运行方式
+
+```bash
+conda activate mm26
+cd code_template
+python main.py
+```
+
+### GUI 说明
+
+运行 `python main.py` 启动交互式界面：
+
+- **左侧画布**：展示社交网络图，节点大小/颜色反映中心性得分，top-k 节点红框高亮
+- **右侧面板**（三个标签页）：
+  - **Centrality**：选择中心性指标（Degree / Closeness / Betweenness / PageRank）、调整 top-k、查看排名表
+  - **Propagation**：SIR 信息传播模拟——对比 PageRank 最高与最低节点的逐步传播动画（支持滑动条、播放/暂停）
+  - **Inspector**：点击画布上的节点，查看其度数、邻居及所有中心性得分
+
+> 在算法未完成时，GUI 仍然可以正常启动和交互，但中心性得分全为 0、传播模拟无实际效果。
+
+### 需要完成的代码
+
+#### `network_algorithm.py`——算法模块
+
+请补全以下标有 `TODO` 的部分：
+
+| 部分 | 说明 |
+|------|------|
+| `Graph` 类 | 实现无向无权图的数据结构（`add_node`、`add_edge`、`neighbors`、`degree` 等），可自由选择底层结构 |
+| `bfs_shortest_paths(G, source)` | 从 source 出发执行 BFS，返回距离、最短路径数、前驱列表、遍历序列 |
+| `degree_centrality(G)` | 度中心性：$C_D(v) = \deg(v) / (n-1)$ |
+| `closeness_centrality(G)` | 接近中心性：$C_C(v) = (n-1) / \sum_{u \neq v} d(v,u)$ |
+| `betweenness_centrality(G)` | 中介中心性（Brandes 算法） |
+| `pagerank(G)` | [Optional] PageRank 迭代算法 |
+| `sir_simulation(G, seeds, ...)` | [Optional] SIR 信息传播模拟 |
+
+#### `gui.py`——可视化模块
+
+请补全 `_draw_centrality` 方法中标有 `TODO` 的部分：
+
+| 部分 | 说明 |
+|------|------|
+| 绘制边 | 遍历图的边，用 `ax.plot()` 绘制所有连接线 |
+| 绘制节点 | 用 `ax.scatter()` 绘制所有节点，大小和颜色应反映中心性得分 |
+
+> top-k 高亮、节点标签、colorbar 等其余可视化代码已提供，无需修改。
+
+完成后，重新运行 `python main.py` 即可验证结果。
