@@ -1,7 +1,7 @@
 """
 地铁路径规划 —— 交互式 GUI 模块
 
-基于 Tkinter + Matplotlib（纯手绘，无 networkx 依赖），提供：
+基于 Tkinter + Matplotlib，提供：
   - 城市选择 → 绘制全网络
   - 起终站下拉选择 → 即时高亮
   - 求解按钮 → Dijkstra 最短路径高亮 + 文本输出
@@ -254,10 +254,6 @@ class MetroApp:
             self._draw_base()
             self.canvas.draw_idle()
         self.output_text.delete("1.0", tk.END)
-
-    # ================================================================
-    # 绘图（纯 matplotlib，无 networkx）
-    # ================================================================
 
     def _draw_base(self):
         """绘制底层地铁网络。"""
