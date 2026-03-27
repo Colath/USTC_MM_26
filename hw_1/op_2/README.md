@@ -10,6 +10,12 @@
   - [运行方式](#运行方式)
   - [GUI 说明](#gui-说明)
   - [需要完成的代码](#需要完成的代码)
+- [C++ 框架](#c-框架)
+  - [文件结构](#文件结构)
+  - [需要完成的代码](#需要完成的代码-1)
+  - [编译](#编译)
+  - [运行方式](#运行方式-1)
+  - [GUI 说明](#gui-说明-1)
 
 ## 引言
 
@@ -108,3 +114,93 @@ python main.py
 | `MetroSystem.shortest_path(src_name, dst_name)` | 将站名转为 id，调用 `dijkstra` 求解 |
 
 完成后，重新运行 `python main.py`，选择城市和站点即可验证结果。
+
+## C++ 框架
+
+我们同样提供了 C++ 实现框架，依赖 OpenCV 和标准库。仅供参考。
+
+### 文件结构
+
+```
+code_template_cpp/
+├── main.cpp              # 程序入口
+├── metro_algorithm.h     # 算法头文件（相关类和函数的声明）
+├── metro_algorithm.cpp   # 算法实现（需补全 TODO）
+├── metro_gui.h           # GUI 头文件
+├── metro_gui.cpp         # GUI 实现（已提供）
+└── CMakeLists.txt
+```
+
+### 需要完成的代码
+
+打开 `code_template_cpp/metro_algorithm.cpp`，实现以下三处 TODO：
+
+| TODO | 函数 / 方法 | 说明 |
+|------|------------|------|
+| 1/3 | `Graph::addEdge(u, v, w)` | 向邻接表添加一条无向加权边|
+| 2/3 | `Graph::numEdges()` | 返回图中无向边的总数 |
+| 3/3 | `dijkstra(G, src, dst)` | 实现 Dijkstra算法，返回最短路径 `Path{total_cost, node_ids}` |
+
+已提供的部分：
+- 完整 OpenCV GUI（图形绘制、鼠标交互、信息面板）
+
+### 编译
+
+`code_template_cpp/` 目录下包含独立的 `CMakeLists.txt`，可直接在该目录下编译。
+
+环境配置（安装 CMake、编译器、OpenCV）请参考 [BUILD_CPP.md](../../BUILD_CPP.md)。
+
+```bash
+# Linux / macOS（在 code_template_cpp/ 目录下执行）
+mkdir build && cd build
+cmake ..
+make
+```
+
+```powershell
+# Windows（在 code_template_cpp\ 目录下执行）
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+cmake --build build --config Release
+```
+
+**推荐使用 VS Code + CMake Tools 插件**：用 VS Code 打开 `code_template_cpp/` 文件夹，点击 CMake Tools 底部状态栏的 **Build** 即可。
+
+### 运行方式
+
+可执行文件 `op2_template` 位于 `build/` 目录下。城市通过**命令行参数**指定。
+
+```bash
+# 从 build/ 运行（自动查找 ../../data，默认第一个城市）
+./op2_template
+
+# 指定城市（名称，不区分大小写）
+./op2_template Barcelona
+
+# 指定数据目录和城市
+./op2_template ../../data Barcelona
+
+# 或按城市索引 0, 1, 2, ...
+./op2_template ../../data 0          
+```
+
+> **Windows：**
+> ```powershell
+> .\op2_template.exe
+> .\op2_template.exe Barcelona
+> .\op2_template.exe C:\path\to\data Beijing
+> ```
+
+### GUI 说明
+
+程序启动后弹出地铁网络可视化窗口，左侧为图形区，右侧为信息面板。
+
+| 操作 | 说明 |
+|------|------|
+| **第 1 次左键单击** | 选中起始站（标记为绿色 S） |
+| **第 2 次左键单击** | 选中终点站（标记为蓝色 D） |
+| **第 3 次左键单击** | 重置选择 |
+| 按 **Space / Enter** | 执行 Dijkstra，在图上高亮最短路径（蓝色），右侧显示距离与站名 |
+| 按 **r** | 清除当前选择和路径 |
+| 按 **q / Esc** | 退出程序 |
+
+

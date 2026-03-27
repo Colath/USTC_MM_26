@@ -25,7 +25,27 @@
 作业文档（WIP）：
 - [作业1：图与网络模型](./hw_1/README.md)
 
-## 2. 辅助资料
+## 2. 相关软件
+
+### 2.1 Git
+
+Git 是最常用的版本控制工具，可以记录代码/文档的修改历史，方便回滚、协作与提交作业。课程作业建议使用 Git 管理本仓库的代码与报告。
+
+相关链接：[官网](https://git-scm.com/)，[下载链接](https://git-scm.com/download/win)，[菜鸟 Git 教程](https://www.runoob.com/git/git-tutorial.html) ，[廖雪峰 Git 教程](https://www.liaoxuefeng.com/wiki/896043488029600) 
+
+### 2.2 C++ 程序编译
+
+部分作业中提供了 C++ 实现框架（位于各题的 `code_template_cpp/` 目录），但 C++ 程序需要先编译才能运行。本节介绍如何使用 CMake 对本作业中的 C++ 程序进行构建和编译，详见 [C++ 程序编译说明](./BUILD_CPP.md)。
+
+相关链接：[官网](https://cmake.org/), [官方教程](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)，[官方文档](https://cmake.org/documentation/)，[适合初学者的 CMakeTutorial](https://github.com/BrightXiaoHan/CMakeTutorial)
+
+### 2.3 Miniforge
+
+Miniforge 是一个轻量级的 Conda 发行版（默认使用社区维护的 `conda-forge` 软件源），可用于在 Windows/macOS/Linux 上创建彼此隔离的 Python 环境，便于统一课程作业的依赖版本，避免“系统 Python/包版本冲突”。安装后你会得到 `conda` 与更快的 `mamba`（若未自带，可后续安装）。
+
+相关链接：[官网](https://conda-forge.org/miniforge/)，[官方 GitHub 仓库](https://github.com/conda-forge/miniforge)
+
+## 3. 辅助资料
 
 - `MATLAB` 相关资源：[MATLAB 官方文档](https://ww2.mathworks.cn/help/matlab/index.html?s_tid=hc_panel), [MATLAB 教程](https://www.cainiaojc.com/matlab/matlab-tutorial.html)
 - `CPP` 相关资源：[CPP Reference](https://en.cppreference.com/w/), [CPP 教程](https://www.runoob.com/cplusplus/cpp-tutorial.html)

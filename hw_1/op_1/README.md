@@ -12,6 +12,11 @@
   - [文件结构](#文件结构)
   - [运行方式](#运行方式-1)
   - [需要完成的代码](#需要完成的代码-1)
+- [C++ 框架](#c-框架)
+  - [需要完成的代码](#需要完成的代码-2)
+  - [编译](#编译)
+  - [运行方式](#运行方式-2)
+  - [GUI 说明](#gui-说明)
 
 ## 引言
 
@@ -66,7 +71,7 @@
 - 对实验结果的必要说明
 
 实现说明：
-- 本次作业提供了 `MATLAB` 和 `Python` 两套程序框架，可任选其一
+- 本次作业提供了 `MATLAB` , `Python` 和 `C++` 三套程序框架，可任选其一
 - 本次实验不限制编程语言，但如果你不打算使用提供的框架，请自行搭建类似的图形界面
 - 如果你有新解法或其他方面的创新，欢迎在报告中呈现
 
@@ -137,3 +142,71 @@ python seam_carving.py
 | `seam_carve_image(im, sz)` | 输入原始图像 `im` 和目标尺寸 `sz = (target_h, target_w)`，返回调整后的图像 |
 
 完成后，运行 `python seam_carving.py` 即可验证结果。欢迎进一步优化或实现更多功能。
+
+## C++ 框架
+
+我们同样提供了 C++ 实现框架，依赖 OpenCV 和标准库。仅供参考。
+
+### 需要完成的代码
+
+打开 `code_template_cpp/main.cpp`，找到 `TODO` 注释，实现以下函数：
+
+```
+seamCarveImage(img, target_rows, target_cols)
+```
+
+该函数将输入图像缩放到指定的目标尺寸。
+
+### 编译
+
+`code_template_cpp/` 目录下包含独立的 `CMakeLists.txt`，可直接在该目录下编译。
+
+环境配置（安装 CMake、编译器、OpenCV）请参考 [BUILD_CPP.md](../../BUILD_CPP.md)。
+
+```bash
+# Linux / macOS（在 code_template_cpp/ 目录下执行）
+mkdir build && cd build
+cmake ..
+make
+```
+
+```powershell
+# Windows（在 code_template_cpp\ 目录下执行）
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+cmake --build build --config Release
+```
+
+**推荐使用VS Code+ CMake Tools插件**：用 VS Code 打开 `code_template_cpp/` 文件夹，点击CMake Tools底部状态栏的 **Build** 即可。
+
+### 运行方式
+
+使用命令行编译时，可执行文件位于 `build/` 目录下；使用 VS Code CMake Tools 时通常也在 `build/` 下。
+
+```bash
+# 在 build/ 目录下运行，使用默认图片（../figs/original.png）
+./op1_template
+
+# 指定图片路径
+./op1_template /path/to/image.png
+```
+
+> **Windows：**
+> ```powershell
+> .\op1_template.exe
+> .\op1_template.exe C:\path\to\image.png
+> ```
+
+### GUI 说明
+
+程序启动后会弹出一个窗口，左侧显示原图，右侧显示处理结果。
+
+| 操作 | 说明 |
+|------|------|
+| 滑动 **Col %** 条 | 设置目标宽度（占原始宽度的百分比，10–200%）|
+| 滑动 **Row %** 条 | 设置目标高度（占原始高度的百分比，10–200%）|
+| 按 **Space** | 执行接缝裁剪，右侧显示结果 |
+| 按 **s** | 将结果保存为 `result.png` |
+| 按 **r** | 重置滑块与结果 |
+| 按 **q / Esc** | 退出程序 |
+
+处理进度会实时打印到终端。图像较大或调整幅度较大时，计算可能需要数秒，请耐心等待。

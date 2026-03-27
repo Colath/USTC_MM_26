@@ -1,4 +1,21 @@
 test/
 __pycache__
 **/code_answer/
+**/code_answer_cpp/
 **/.DS_Store
+
+# C++ / CMake
+build/
+**/build/
+CMakeCache.txt
+**/CMakeCache.txt
+CMakeFiles/
+**/CMakeFiles/
+cmake_install.cmake
+**/cmake_install.cmake
+Makefile
+**/Makefile
+*.o
+*.obj
+*.exe
+*.out
