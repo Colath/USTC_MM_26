@@ -1,25 +1,15 @@
-%   Copyright 2025, Renjie Chen @ USTC
-%% read image
-im = imread('peppers.png');
-fig=figure('Units', 'pixel', 'Position', [100,100,1000,700], 'toolbar', 'none');
-subplot(121); imshow(im); title({'Input image'});
-subplot(122); himg = imshow(im); 
-title({'Resized Image', ...
-       'Blue: SC-Shrink | Green: SC-Enlarge', ...
-       'Yellow: Scale-Shrink | Red: Crop-Shrink | Cyan: Scale-Enlarge'}); 
-hToolResize = uipushtool('CData', reshape(repmat([0 0 1], 100, 1), [10 10 3]), 'TooltipString', 'Seam Carving: Shrink image (-300)', ...
-                        'ClickedCallback', @(~, ~) update_display(himg, seam_carve_image(im, size(im,1:2)-[0 300])));
-hToolEnlarge = uipushtool('CData', reshape(repmat([0 1 0], 100, 1), [10 10 3]), 'TooltipString', 'Seam Carving: Enlarge image (+200)', ...
-                        'ClickedCallback', @(~, ~) update_display(himg, seam_carve_image(im, size(im,1:2)+[0 200])));
-hToolScaleShrink = uipushtool('CData', reshape(repmat([1 1 0], 100, 1), [10 10 3]), 'TooltipString', 'Standard Scale: Shrink (-300)', ...
-                        'ClickedCallback', @(~, ~) update_display(himg, imresize(im, [size(im,1), size(im,2)-300])));
-hToolCropShrink = uipushtool('CData', reshape(repmat([1 0 0], 100, 1), [10 10 3]), 'TooltipString', 'Standard Crop: Center Shrink (-300)', ...
-                        'ClickedCallback', @(~, ~) update_display(himg, im(:, 151:end-150, :)));
-hToolScaleEnlarge = uipushtool('CData', reshape(repmat([0 1 1], 100, 1), [10 10 3]), 'TooltipString', 'Standard Scale: Enlarge (+200)', ...
-                        'ClickedCallback', @(~, ~) update_display(himg, imresize(im, [size(im,1), size(im,2)+200])));
+im_beach = imread('original.png'); 
+added_width = 300;
+new_size = size(im_beach, 1:2) + [0 added_width];
 
-%% TODO: implement function: searm_carve_image
-% check the title above the image for how to use the user-interface to resize the input image
+im_beach_scale = imresize(im_beach, new_size);
+
+im_beach_sc = seam_carve_image(im_beach, new_size);
+figure('Name', 'Beach Enlarge Compare', 'Units', 'pixel', 'Position', [100,100,1500,600]);
+subplot(131); imshow(im_beach); title('Original Beach');
+subplot(132); imshow(im_beach_sc); title('Seam Insertion (+300)');
+subplot(133); imshow(im_beach_scale); title('Standard Scale (+300)');
+
 function im = seam_carve_image(im, sz)
     original_class = class(im);
     im = double(im);
@@ -112,26 +102,4 @@ function im = seam_carve_image(im, sz)
     end
 
     if strcmp(original_class, 'uint8'), im = uint8(im); end
-end
-
-function update_display(himg, new_im)
-    [h, w, ~] = size(new_im);
-    hax = himg.Parent;
-    set(himg, 'CData', new_im, 'XData', [1 w], 'YData', [1 h]);
-    set(hax, 'XLim', [0.5 w+0.5], 'YLim', [0.5 h+0.5]);
-    axs = findobj(hax.Parent, 'Type', 'axes');
-    hax_left = axs(axs ~= hax); 
-    
-    if ~isempty(hax_left)
-        hax_left = hax_left(1); 
-        pos_left = get(hax_left, 'Position'); 
-        orig_w = diff(get(hax_left, 'XLim')); 
-        pos_right = get(hax, 'Position');
-        pos_right(2) = pos_left(2); 
-        pos_right(4) = pos_left(4); 
-        pos_right(3) = pos_left(3) * (w / orig_w);
-        pos_right(1) = 0.75 - pos_right(3)/2;
-        set(hax, 'Position', pos_right);
-    end
-    drawnow; 
 end
