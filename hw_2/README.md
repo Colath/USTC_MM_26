@@ -100,6 +100,8 @@ $$
 
 阅读材料：[非负矩阵分解(NMF)简介](https://zhuanlan.zhihu.com/p/22043930)
 
+参考文献：[Algorithms for Non-negative Matrix Factorization](http://luthuli.cs.uiuc.edu/~daf/courses/Opt-2019/Papers/lee01algorithms.pdf)
+
 请大家实现如下任务：
 
 (1) 选择（你喜欢的）几个主题（如游戏、体育、政治等，使得各个主题尽量不重合），选择和各个主题关联性强的多个关键词。
