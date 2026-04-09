@@ -19,3 +19,5 @@ Makefile
 *.obj
 *.exe
 *.out
+
+.venv/
