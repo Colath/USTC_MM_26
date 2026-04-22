@@ -5,9 +5,7 @@ from skimage.metrics import structural_similarity as ssim
 import gradio as gr
 import pywt
 
-# ==========================================
-# 任务 1: SVD 分解算法 (手写)
-# ==========================================
+# 任务 1: SVD 分解算法 (手写）
 def custom_svd(A):
     ATA = np.dot(A.T, A)
     eigenvalues, V = np.linalg.eigh(ATA)
@@ -29,9 +27,7 @@ def compress_channel_svd(channel, k):
     VT_k = VT[:k, :]
     return np.clip(np.dot(U_k, np.dot(Sigma_k, VT_k)), 0, 255)
 
-# ==========================================
 # 任务 3 (Optional): DWT 小波压缩算法
-# ==========================================
 def compress_channel_dwt(channel, threshold):
     coeffs = pywt.wavedec2(channel, 'haar', level=2)
     coeffs_thresholded = list(coeffs)
@@ -43,9 +39,7 @@ def compress_channel_dwt(channel, threshold):
     reconstructed = pywt.waverec2(coeffs_thresholded, 'haar')
     return np.clip(reconstructed, 0, 255)
 
-# ==========================================
 # 核心处理逻辑与指标计算
-# ==========================================
 def process_image(image, param_value, algorithm):
     if image is None:
         return None, "请先上传图片"
@@ -104,7 +98,7 @@ def build_gui():
                     value="SVD (奇异值分解)", 
                     label="选择压缩算法"
                 )
-                # 最大值调整为 500
+                # 最大值调整为 1000
                 param_slider = gr.Slider(minimum=1, maximum=1000, step=1, value=50, label="调整参数 (SVD的k值 或 DWT的阈值)")
                 run_btn = gr.Button("开始压缩", variant="primary")
                 
